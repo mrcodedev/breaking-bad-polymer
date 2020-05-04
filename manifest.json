@@ -1,0 +1,7 @@
+{
+  "name": "BreakingPolymer",
+  "short_name": "BreakingPolymer",
+  "description": "Breaking Bad App",
+  "start_url": "/",
+  "display": "standalone"
+}
