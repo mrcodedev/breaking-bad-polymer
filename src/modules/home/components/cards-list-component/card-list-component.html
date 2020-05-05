@@ -1,0 +1,57 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../components/card-component/card-component.html">
+
+<dom-module id="bb-card-list">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      .container__card-list {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-gap: 25px;
+        justify-items: center;
+      }
+
+    </style>
+    <div class="container__card-list">
+      <bb-card></bb-card>
+      <bb-card></bb-card>
+      <bb-card></bb-card>
+      <bb-card></bb-card>
+      <bb-card></bb-card>
+      <bb-card></bb-card>
+      <bb-card></bb-card>
+      <bb-card></bb-card>
+      <bb-card></bb-card>
+      <bb-card></bb-card>
+      <bb-card></bb-card>
+    </div>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class CardList extends Polymer.Element {
+      static get is() {
+        return 'bb-card-list';
+      }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'app-component'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(CardList.is, CardList);
+
+  </script>
+</dom-module>

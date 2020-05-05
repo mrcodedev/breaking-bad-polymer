@@ -1,6 +1,6 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 
-<dom-module id="card-component">
+<dom-module id="bb-card">
   <template>
     <style>
       :host {
@@ -126,13 +126,12 @@
      */
     class CardComponent extends Polymer.Element {
       static get is() {
-        return 'card-component';
+        return 'bb-card';
       }
       static get properties() {
         return {
           prop1: {
             type: String,
-            value: 'app-component'
           }
         };
       }
