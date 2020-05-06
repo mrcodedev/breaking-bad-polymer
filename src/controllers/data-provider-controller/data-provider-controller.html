@@ -1,6 +1,6 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 
-<dom-module id="cells-data-provider">
+<dom-module id="data-provider">
   <script>
     /**
      * @customElement
@@ -8,13 +8,10 @@
      */
     class DataProvider extends Polymer.Element {
       static get is() {
-        return 'cells-data-provider';
+        return 'data-provider';
       }
       static get properties() {
         return {
-          id: {
-            type: String,
-          },
           host: {
             type: String,
           },
@@ -57,7 +54,7 @@
             const parsedData = JSON.parse(data);
 
             this.dispatchEvent(
-              new CustomEvent('request-sucess', {
+              new CustomEvent('request-success', {
                 bubbles: true,
                 composed: true,
                 detail: {
