@@ -1,0 +1,77 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../data-provider-controller/data-provider-controller.html">
+
+<dom-module id="data-manager">
+  <template>
+    <data-provider host='[[host]]' path='[[path]]' headers='[[headers]]' params='[[params]]' method='[[method]]'>
+    </data-provider>
+  </template>
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class DataManager extends Polymer.Element {
+      static get is() {
+        return 'data-manager';
+      }
+      static get properties() {
+        return {
+          host: {
+            type: String
+
+          },
+          path: {
+            type: String,
+          },
+          headers: {
+            type: String,
+          },
+          params: {
+            type: String,
+          },
+          method: {
+            type: String,
+          },
+          onRequestError: {
+            type: String,
+          }
+        };
+      }
+
+      _onRequestSuccess(event) {
+        this.dispatchEvent(new CustomEvent('page-list-event', {
+          detail: event.detail.value,
+          bubbles: true,
+          composed: true
+        }));
+      }
+
+      _onRequestError(event) {
+        this.dispatchEvent(new CustomEvent('page-list-event-error', {
+          detail: event.detail,
+          bubbles: true,
+          composed: true
+        }));
+      }
+
+      constructor() {
+        super();
+      }
+
+      ready() {
+        super.ready();
+        this.addEventListener('request-success', (success) => {
+          this._onRequestSuccess(success);
+        })
+
+        this.addEventListener('request-error', (error) => {
+          this._onRequestError(error);
+        })
+      }
+    }
+
+    window.customElements.define(DataManager.is, DataManager);
+
+  </script>
+</dom-module>
