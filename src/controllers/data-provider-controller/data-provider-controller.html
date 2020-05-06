@@ -1,0 +1,96 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="cells-data-provider">
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class DataProvider extends Polymer.Element {
+      static get is() {
+        return 'cells-data-provider';
+      }
+      static get properties() {
+        return {
+          id: {
+            type: String,
+          },
+          host: {
+            type: String,
+          },
+          path: {
+            type: String,
+          },
+          headers: {
+            type: String,
+          },
+          params: {
+            type: String,
+          },
+          method: {
+            type: String,
+          }
+        };
+      }
+
+      generateRequest() {
+        const realPath = `${this.host}${this.path}`;
+        const myFetchData = {
+          method: this.method,
+          headers: {}
+        }
+
+        fetch(realPath, myFetchData)
+          .then((response) => {
+            if (response.ok) {
+              this.requestSuccess(response.text());
+            }
+          })
+          .catch((error) => {
+            this.requestError(error);
+          });
+      }
+
+      requestSuccess(apiData) {
+        apiData
+          .then((data) => {
+            const parsedData = JSON.parse(data);
+
+            this.dispatchEvent(
+              new CustomEvent('request-sucess', {
+                bubbles: true,
+                composed: true,
+                detail: {
+                  value: parsedData
+                },
+              })
+            );
+          })
+      }
+
+      requestError(errorData) {
+        this.dispatchEvent(
+          new CustomEvent('request-error', {
+            bubbles: true,
+            composed: true,
+            detail: {
+              value: errorData
+            }
+          })
+        )
+      }
+
+      constructor() {
+        super();
+      }
+
+      ready() {
+        super.ready();
+        this.generateRequest();
+      }
+    }
+
+    window.customElements.define(DataProvider.is, DataProvider);
+
+  </script>
+</dom-module>
