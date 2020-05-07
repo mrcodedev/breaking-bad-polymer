@@ -26,6 +26,16 @@
           },
           method: {
             type: String,
+          },
+          onRequestSuccess: {
+            type: String,
+            notify: true,
+            readOnly: true,
+          },
+          onRequestError: {
+            type: String,
+            notify: true,
+            readOnly: true,
           }
         };
       }
@@ -40,38 +50,38 @@
         fetch(realPath, myFetchData)
           .then((response) => {
             if (response.ok) {
-              this.requestSuccess(response.text());
+              this._requestSuccess(response.text());
+            } else {
+              throw new Error('Something went wrong');
             }
           })
           .catch((error) => {
-            this.requestError(error);
+            this._requestError(error);
           });
       }
 
-      requestSuccess(apiData) {
+      _requestSuccess(apiData) {
         apiData
           .then((data) => {
-            const parsedData = JSON.parse(data);
-
             this.dispatchEvent(
               new CustomEvent('request-success', {
                 bubbles: true,
                 composed: true,
                 detail: {
-                  value: parsedData
+                  data
                 },
               })
             );
           })
       }
 
-      requestError(errorData) {
+      _requestError(errorData) {
         this.dispatchEvent(
           new CustomEvent('request-error', {
             bubbles: true,
             composed: true,
             detail: {
-              value: errorData
+              error: errorData
             }
           })
         )

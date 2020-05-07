@@ -3,7 +3,8 @@
 
 <dom-module id="data-manager">
   <template>
-    <data-provider host='[[host]]' path='[[path]]' headers='[[headers]]' params='[[params]]' method='[[method]]'>
+    <data-provider host='[[host]]' path='[[path]]' headers='[[headers]]' params='[[params]]' method='[[method]]'
+      on-request-success="_onRequestSuccess" on-request-error="_onRequestError">
     </data-provider>
   </template>
   <script>
@@ -41,7 +42,9 @@
 
       _onRequestSuccess(event) {
         this.dispatchEvent(new CustomEvent('page-list-event', {
-          detail: event.detail.value,
+          detail: {
+            data: event.detail.data
+          },
           bubbles: true,
           composed: true
         }));
@@ -49,7 +52,9 @@
 
       _onRequestError(event) {
         this.dispatchEvent(new CustomEvent('page-list-event-error', {
-          detail: event.detail,
+          detail: {
+            error: event.detail.error
+          },
           bubbles: true,
           composed: true
         }));
@@ -57,17 +62,6 @@
 
       constructor() {
         super();
-      }
-
-      ready() {
-        super.ready();
-        this.addEventListener('request-success', (success) => {
-          this._onRequestSuccess(success);
-        })
-
-        this.addEventListener('request-error', (error) => {
-          this._onRequestError(error);
-        })
       }
     }
 
