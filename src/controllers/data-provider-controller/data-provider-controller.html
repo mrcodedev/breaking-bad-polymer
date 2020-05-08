@@ -1,0 +1,119 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="data-provider">
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class DataProvider extends Polymer.Element {
+      static get is() {
+        return 'data-provider';
+      }
+      static get properties() {
+        return {
+          host: {
+            type: String,
+          },
+          path: {
+            type: String,
+          },
+          headers: {
+            type: Object,
+          },
+          body: {
+            type: String,
+          },
+          params: {
+            type: String,
+          },
+          method: {
+            type: String,
+          },
+          onRequestSuccess: {
+            type: String,
+            notify: true,
+            readOnly: true,
+          },
+          onRequestError: {
+            type: String,
+            notify: true,
+            readOnly: true,
+          }
+        };
+      }
+
+      _generateRequest() {
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        const realPath = `${this.host}${this.path}${this.params}`;
+
+        const methodsWithoutBody = ['GET', 'HEAD', 'CONNECT', 'OPTIONS', 'TRACE'];
+
+        const myFetchData = {
+          method: this.method,
+          headers: this.headers,
+          signal
+        };
+
+        if (!methodsWithoutBody.includes(this.method)) {
+          myFetchData.body = JSON.stringify(this.body);
+        }
+
+        fetch(realPath, myFetchData)
+          .then((response) => {
+            if (response.ok) {
+              this._requestSuccess(response.json());
+            } else {
+              controller.abort();
+              throw new Error(`${response.statusText}, status: ${response.status}`);
+            }
+          })
+          .catch((error) => {
+            controller.abort();
+            this._requestError(error);
+          });
+      }
+
+      _requestSuccess(apiData) {
+        apiData
+          .then((data) => {
+            this.dispatchEvent(
+              new CustomEvent('request-success', {
+                bubbles: true,
+                composed: true,
+                detail: {
+                  data
+                },
+              })
+            );
+          })
+      }
+
+      _requestError(errorData) {
+        this.dispatchEvent(
+          new CustomEvent('request-error', {
+            bubbles: true,
+            composed: true,
+            detail: {
+              error: errorData
+            }
+          })
+        )
+      }
+
+      constructor() {
+        super();
+      }
+
+      ready() {
+        super.ready();
+        this._generateRequest();
+      }
+    }
+
+    window.customElements.define(DataProvider.is, DataProvider);
+
+  </script>
+</dom-module>

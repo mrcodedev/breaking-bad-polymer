@@ -1,0 +1,95 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../data-provider-controller/data-provider-controller.html">
+
+<dom-module id="data-manager">
+  <template>
+    <data-provider host='[[host]]' path='[[path]]' headers='[[headers]]' body="[[body]]" params='[[params]]'
+      method='[[method]]' on-request-success="_onRequestSuccess" on-request-error="_onRequestError">
+    </data-provider>
+  </template>
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class DataManager extends Polymer.Element {
+      static get is() {
+        return 'data-manager';
+      }
+      static get properties() {
+        return {
+          host: {
+            type: String
+
+          },
+          path: {
+            type: String,
+          },
+          headers: {
+            type: Object,
+          },
+          body: {
+            type: String,
+          },
+          params: {
+            type: String,
+          },
+          method: {
+            type: String,
+          },
+          onPageListEvent: {
+            type: String,
+            notify: true,
+            readOnly: true,
+          },
+          onPageListEventError: {
+            type: String,
+            notify: true,
+            readOnly: true,
+          }
+        };
+      }
+
+      _onRequestSuccess(event) {
+        const data = event.detail.data.map((character) => {
+          return {
+            id: character.char_id,
+            name: character.name,
+            image: character.img,
+            nickname: character.nickname,
+            birthday: character.birthday,
+            status: character.status,
+            occupation: character.occupation,
+            playedBy: character.portrayed,
+            sessions: character.appearance
+          };
+        })
+
+        this.dispatchEvent(new CustomEvent('page-list-event', {
+          detail: {
+            data
+          },
+          bubbles: true,
+          composed: true
+        }));
+      }
+
+      _onRequestError(event) {
+        this.dispatchEvent(new CustomEvent('page-list-event-error', {
+          detail: {
+            error: event.detail.error
+          },
+          bubbles: true,
+          composed: true
+        }));
+      }
+
+      constructor() {
+        super();
+      }
+    }
+
+    window.customElements.define(DataManager.is, DataManager);
+
+  </script>
+</dom-module>

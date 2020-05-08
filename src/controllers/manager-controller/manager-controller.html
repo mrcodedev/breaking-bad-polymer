@@ -1,0 +1,68 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../data-manager-controller/data-manager-controller.html">
+
+<dom-module id="manager-provider">
+  <template>
+    <data-manager host='[[_host]]' path='[[_path]]' headers='[[_headers]]' body='[[_body]]' params='[[_params]]'
+      method='[[_method]]' on-page-list-event="_pageList" on-page-list-event-error="_pageListError">
+  </template>
+  </data-manager>
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class ManagerProvider extends Polymer.Element {
+      static get is() {
+        return 'manager-provider';
+      }
+      static get properties() {
+        return {
+          _host: {
+            type: String
+          },
+          _path: {
+            type: String
+          },
+          _headers: {
+            type: Object
+          },
+          _body: {
+            type: String,
+          },
+          _params: {
+            type: String
+          },
+          _method: {
+            type: String
+          }
+        };
+      }
+
+      constructor() {
+        super();
+        this._host = 'https://www.breakingbadapi.com/api/';
+        this._path = 'characters';
+        this._params = ''
+        this._headers = {};
+        this._body = '';
+        this._method = 'GET';
+      }
+
+      ready() {
+        super.ready();
+      }
+
+      _pageList(event) {
+        return event.detail.data;
+      }
+
+      _pageListError(event) {
+        return event.detail.error;
+      }
+    }
+
+    window.customElements.define(ManagerProvider.is, ManagerProvider);
+
+  </script>
+</dom-module>
