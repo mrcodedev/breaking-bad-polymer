@@ -3,7 +3,8 @@
 
 <dom-module id="data-manager">
   <template>
-    <data-provider host='[[host]]' path='[[path]]' headers='[[headers]]' params='[[params]]' method='[[method]]'>
+    <data-provider host='[[host]]' path='[[path]]' headers='[[headers]]' body="[[body]]" params='[[params]]'
+      method='[[method]]' on-request-success="_onRequestSuccess" on-request-error="_onRequestError">
     </data-provider>
   </template>
   <script>
@@ -25,6 +26,9 @@
             type: String,
           },
           headers: {
+            type: Object,
+          },
+          body: {
             type: String,
           },
           params: {
@@ -33,15 +37,38 @@
           method: {
             type: String,
           },
-          onRequestError: {
+          onPageListEvent: {
             type: String,
+            notify: true,
+            readOnly: true,
+          },
+          onPageListEventError: {
+            type: String,
+            notify: true,
+            readOnly: true,
           }
         };
       }
 
       _onRequestSuccess(event) {
+        const data = event.detail.data.map((character) => {
+          return {
+            id: character.char_id,
+            name: character.name,
+            image: character.img,
+            nickname: character.nickname,
+            birthday: character.birthday,
+            status: character.status,
+            occupation: character.occupation,
+            playedBy: character.portrayed,
+            sessions: character.appearance
+          };
+        })
+
         this.dispatchEvent(new CustomEvent('page-list-event', {
-          detail: event.detail.value,
+          detail: {
+            data
+          },
           bubbles: true,
           composed: true
         }));
@@ -49,7 +76,9 @@
 
       _onRequestError(event) {
         this.dispatchEvent(new CustomEvent('page-list-event-error', {
-          detail: event.detail,
+          detail: {
+            error: event.detail.error
+          },
           bubbles: true,
           composed: true
         }));
@@ -57,17 +86,6 @@
 
       constructor() {
         super();
-      }
-
-      ready() {
-        super.ready();
-        this.addEventListener('request-success', (success) => {
-          this._onRequestSuccess(success);
-        })
-
-        this.addEventListener('request-error', (error) => {
-          this._onRequestError(error);
-        })
       }
     }
 

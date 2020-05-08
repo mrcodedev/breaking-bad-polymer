@@ -19,6 +19,9 @@
             type: String,
           },
           headers: {
+            type: Object,
+          },
+          body: {
             type: String,
           },
           params: {
@@ -26,52 +29,75 @@
           },
           method: {
             type: String,
+          },
+          onRequestSuccess: {
+            type: String,
+            notify: true,
+            readOnly: true,
+          },
+          onRequestError: {
+            type: String,
+            notify: true,
+            readOnly: true,
           }
         };
       }
 
-      generateRequest() {
-        const realPath = `${this.host}${this.path}`;
+      _generateRequest() {
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        const realPath = `${this.host}${this.path}${this.params}`;
+
+        const methodsWithoutBody = ['GET', 'HEAD', 'CONNECT', 'OPTIONS', 'TRACE'];
+
         const myFetchData = {
           method: this.method,
-          headers: {}
+          headers: this.headers,
+          signal
+        };
+
+        if (!methodsWithoutBody.includes(this.method)) {
+          myFetchData.body = JSON.stringify(this.body);
         }
 
         fetch(realPath, myFetchData)
           .then((response) => {
             if (response.ok) {
-              this.requestSuccess(response.text());
+              this._requestSuccess(response.json());
+            } else {
+              controller.abort();
+              throw new Error(`${response.statusText}, status: ${response.status}`);
             }
           })
           .catch((error) => {
-            this.requestError(error);
+            controller.abort();
+            this._requestError(error);
           });
       }
 
-      requestSuccess(apiData) {
+      _requestSuccess(apiData) {
         apiData
           .then((data) => {
-            const parsedData = JSON.parse(data);
-
             this.dispatchEvent(
               new CustomEvent('request-success', {
                 bubbles: true,
                 composed: true,
                 detail: {
-                  value: parsedData
+                  data
                 },
               })
             );
           })
       }
 
-      requestError(errorData) {
+      _requestError(errorData) {
         this.dispatchEvent(
           new CustomEvent('request-error', {
             bubbles: true,
             composed: true,
             detail: {
-              value: errorData
+              error: errorData
             }
           })
         )
@@ -83,7 +109,7 @@
 
       ready() {
         super.ready();
-        this.generateRequest();
+        this._generateRequest();
       }
     }
 
