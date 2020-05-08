@@ -3,7 +3,6 @@
 
 <dom-module id="manager-provider">
   <template>
-
     <data-manager host='[[_host]]' path='[[_path]]' headers='[[_headers]]' body='[[_body]]' params='[[_params]]'
       method='[[_method]]' on-page-list-event="_pageList" on-page-list-event-error="_pageListError">
   </template>
@@ -44,9 +43,9 @@
         super();
         this._host = 'https://www.breakingbadapi.com/api/';
         this._path = 'characters';
-        this._headers = {};
-        this._body = 'dadadsads';
         this._params = ''
+        this._headers = {};
+        this._body = '';
         this._method = 'GET';
       }
 
@@ -55,13 +54,11 @@
       }
 
       _pageList(event) {
-        console.log(event);
-        console.log('Entré a _pageList');
+        return event.detail.data;
       }
 
       _pageListError(event) {
-        console.log('Entré en _pageListError');
-        console.log(event.detail.error);
+        return event.detail.error;
       }
     }
 
