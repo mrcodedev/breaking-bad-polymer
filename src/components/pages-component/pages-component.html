@@ -69,7 +69,6 @@
           numberElements: {
             type: Number
           },
-          //Meter un observable para pillar el anterior y actual valor
           activePageIndex: {
             type: Number,
             value: 0,
@@ -107,15 +106,9 @@
           }
         });
 
-        this.dispatchEvent(new CustomEvent('data-page', {
-          detail: {
-            data: this.dataPage,
-          },
-          bubbles: true,
-          composed: true
-        }));
-
         this.set('numberPages', result);
+
+        this._pageEvent();
       }
 
       _changeActivePage(event) {
@@ -160,6 +153,16 @@
           }
           this._generatePageIndexes();
         }
+      }
+
+      _pageEvent() {
+        this.dispatchEvent(new CustomEvent('data-page', {
+          detail: {
+            data: this.dataPage,
+          },
+          bubbles: true,
+          composed: true
+        }));
       }
     }
 

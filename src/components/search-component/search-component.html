@@ -33,9 +33,9 @@
 
     </style>
     <div class="container-search">
-      <input type="text" placeholder="Search..." name="search" value="{{valueToSearch::input}}" on-keypress="_pepe">
+      <input type="text" placeholder="Search..." name="search" value="{{valueToSearch::input}}"
+        on-keyup="_searchFilter">
       <button type="submit"><i class="fa fa-search">s-i</i></button>
-      {{valueToSearch}}
     </div>
   </template>
 
@@ -56,8 +56,10 @@
           },
           valueToSearch: {
             type: String,
-            observer: '_pepe'
-
+          },
+          filteredData: {
+            type: Array,
+            observer: '_searchEvent'
           }
         };
       }
@@ -68,12 +70,32 @@
 
       _dataSearch(data) {
         if (data.length > 0) {
-          console.log(data);
+          this.dataSearch = data;
         }
       }
 
-      _pepe(first, last) {
-        console.log(last);
+      _searchFilter() {
+        if (this.dataSearch.length > 0) {
+          let searchResult = this.dataSearch.filter(search => search.name.toLowerCase().includes(this.valueToSearch
+            .toLowerCase()) || search.nickname.toLowerCase().includes(this.valueToSearch
+            .toLowerCase()) || search.playedBy.toLowerCase().includes(this.valueToSearch
+            .toLowerCase()) || search.status.toLowerCase().includes(this.valueToSearch
+            .toLowerCase()));
+
+          this.filteredData = searchResult;
+        } else {
+          this.filteredData = this.dataSearch;
+        }
+      }
+
+      _searchEvent() {
+        this.dispatchEvent(new CustomEvent('data-search', {
+          detail: {
+            data: this.filteredData,
+          },
+          bubbles: true,
+          composed: true
+        }));
       }
     }
 
