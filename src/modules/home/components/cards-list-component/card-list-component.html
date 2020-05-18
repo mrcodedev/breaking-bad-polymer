@@ -1,7 +1,6 @@
-<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../../../components/card-component/card-component.html">
+<link rel="import" href="../../../../components/card-component/card-component.html" />
 
-<dom-module id="bb-card-list">
+<dom-module id="card-list">
   <template>
     <style>
       :host {
@@ -18,17 +17,9 @@
 
     </style>
     <div class="container__card-list">
-      <bb-card></bb-card>
-      <bb-card></bb-card>
-      <bb-card></bb-card>
-      <bb-card></bb-card>
-      <bb-card></bb-card>
-      <bb-card></bb-card>
-      <bb-card></bb-card>
-      <bb-card></bb-card>
-      <bb-card></bb-card>
-      <bb-card></bb-card>
-      <bb-card></bb-card>
+      <template is="dom-repeat" items="[[dataset]]">
+        <card-profile data="[[item]]"></card-profile>
+      </template>
     </div>
   </template>
 
@@ -39,15 +30,22 @@
      */
     class CardList extends Polymer.Element {
       static get is() {
-        return 'bb-card-list';
+        return 'card-list';
       }
       static get properties() {
         return {
-          prop1: {
-            type: String,
-            value: 'app-component'
-          }
+          dataset: {
+            type: Array
+          },
         };
+      }
+
+      constructor() {
+        super();
+      }
+
+      ready() {
+        super.ready();
       }
     }
 

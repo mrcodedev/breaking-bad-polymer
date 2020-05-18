@@ -1,10 +1,7 @@
-<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
-
-<dom-module id="bb-card">
+<dom-module id="card-profile">
   <template>
     <style>
       :host {
-        display: block;
         font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
       }
 
@@ -35,7 +32,6 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-        background-image: url('../../../assets/images/img-mock2.jpg');
         background-size: cover;
       }
 
@@ -56,9 +52,7 @@
 
 
       /* DETAIL CARD */
-      .container__detail-block {
-        display: block;
-      }
+      .container__detail-block {}
 
       .detail-block__icon {
         position: absolute;
@@ -72,17 +66,17 @@
         cursor: pointer;
       }
 
-
-
       .detail-block {
+        display: var(--display-profile);
         position: absolute;
         top: 0;
         left: 0;
         z-index: 1;
         width: 100%;
         height: 400px;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.7);
         color: white;
+        transform: rotateY(180deg);
       }
 
       .detail-info {
@@ -90,29 +84,33 @@
       }
 
     </style>
-    <div class="container__card">
+    <div class="container__card" style$="[[cardInfo]]">
       <div class="container__image-block">
-        <div class="card___detail-icon">open</div>
-        <div class="image-block">
+        <div class="card___detail-icon" on-click="_cardAction">open</div>
+        <div class="image-block" style$="background-image: url('[[data.image]]');">
           <div class="image-block__name">
             <div class="name__text">
-              Walter White
+              [[data.name]]
             </div>
             <div class="nickname__text">
-              Heisenberg
+              [[data.nickname]]
             </div>
           </div>
         </div>
       </div>
       <div class="container__detail-block">
-        <div class="detail-block">
-          <div class="detail-block__icon">
+        <div class="detail-block" style$="display: [[cardProfile]]">
+          <div class="detail-block__icon" on-click="_cardAction">
             x
           </div>
           <div class="detail-info">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere veritatis dolorum earum laudantium. Debitis,
-            animi reiciendis harum officiis ducimus placeat aperiam et sed. Tenetur ipsam debitis accusamus libero, nisi
-            unde.
+            <p>Name: [[data.name]]</p>
+            <p>Nickname: [[data.nickname]]</p>
+            <p>Birthday: [[data.birthday]]</p>
+            <p>Status: [[data.status]]</p>
+            <p>Occupation: [[data.occupation]]</p>
+            <p>Played By: [[data.playedBy]]</p>
+            <p>Sessions: [[data.sessions]]</p>
           </div>
         </div>
       </div>
@@ -121,23 +119,73 @@
 
   <script>
     /**
-     * @customElement
+     * @customconsent
      * @polymer
      */
-    class CardComponent extends Polymer.Element {
+    class CardProfile extends Polymer.Element {
       static get is() {
-        return 'bb-card';
+        return 'card-profile';
       }
       static get properties() {
         return {
-          prop1: {
+          data: {
+            id: {
+              type: Number
+            },
+            name: {
+              type: String
+            },
+            image: {
+              type: String
+            },
+            nickname: {
+              type: String
+            },
+            birthday: {
+              type: String
+            },
+            status: {
+              type: String
+            },
+            occupation: {
+              type: String
+            },
+            playedBy: {
+              type: String
+            },
+            sessions: {
+              type: String
+            }
+          },
+          cardInfo: {
             type: String,
+            value: ''
+          },
+          cardProfile: {
+            type: String,
+            value: 'none'
+          },
+          cardStatus: {
+            type: Boolean,
+            value: false
           }
         };
       }
+
+      _cardAction() {
+        if (!this.cardStatus) {
+          this.cardInfo = 'transform: rotateY(180deg); transition: transform 0.5s;'
+          this.cardProfile = 'block';
+          this.cardStatus = true;
+        } else {
+          this.cardInfo = 'transform: rotateY(0deg); transition: transform 0.5s;'
+          this.cardProfile = 'none';
+          this.cardStatus = false;
+        }
+      }
     }
 
-    window.customElements.define(CardComponent.is, CardComponent);
+    window.customElements.define(CardProfile.is, CardProfile);
 
   </script>
 </dom-module>

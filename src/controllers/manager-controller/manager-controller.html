@@ -1,10 +1,9 @@
-<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../data-manager-controller/data-manager-controller.html">
 
-<dom-module id="manager-provider">
+<dom-module id="manager-controller">
   <template>
-    <data-manager host='[[_host]]' path='[[_path]]' headers='[[_headers]]' body='[[_body]]' params='[[_params]]'
-      method='[[_method]]' on-page-list-event="_pageList" on-page-list-event-error="_pageListError">
+    <data-manager host='[[host]]' path='[[path]]' headers='[[headers]]' body='[[body]]' params='[[params]]'
+      method='[[method]]' on-returned-data="_dataReturned" on-returned-data-error="_dataReturnedError">
   </template>
   </data-manager>
   <script>
@@ -12,57 +11,72 @@
      * @customElement
      * @polymer
      */
-    class ManagerProvider extends Polymer.Element {
+    class ManagerController extends Polymer.Element {
       static get is() {
-        return 'manager-provider';
+        return 'manager-controller';
       }
       static get properties() {
         return {
-          _host: {
+          host: {
             type: String
           },
-          _path: {
+          path: {
             type: String
           },
-          _headers: {
+          headers: {
             type: Object
           },
-          _body: {
+          body: {
             type: String,
           },
-          _params: {
+          params: {
             type: String
           },
-          _method: {
+          method: {
             type: String
+          },
+          data: {
+            type: Object
           }
         };
       }
 
       constructor() {
         super();
-        this._host = 'https://www.breakingbadapi.com/api/';
-        this._path = 'characters';
-        this._params = ''
-        this._headers = {};
-        this._body = '';
-        this._method = 'GET';
+        this.host = 'https://www.breakingbadapi.com/api/';
+        this.path = 'characters';
+        this.params = "";
+        this.headers = {};
+        this.body = "";
+        this.method = "GET";
       }
 
       ready() {
         super.ready();
       }
 
-      _pageList(event) {
-        return event.detail.data;
+      _dataReturned(event) {
+        this.dispatchEvent(new CustomEvent('data', {
+          detail: {
+            data: event.detail.data,
+          },
+          bubbles: true,
+          composed: true
+        }));
       }
 
-      _pageListError(event) {
-        return event.detail.error;
+      _dataReturnedError(event) {
+        this.dispatchEvent(new CustomEvent('data', {
+          detail: {
+            data: event.detail.error,
+          },
+          bubbles: true,
+          composed: true
+        }));
       }
     }
 
-    window.customElements.define(ManagerProvider.is, ManagerProvider);
+    window.customElements.define(ManagerController.is, ManagerController);
 
   </script>
 </dom-module>

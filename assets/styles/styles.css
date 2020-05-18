@@ -1,0 +1,46 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*:focus {
+  outline: none;
+}
+
+::selection {
+  color: #FFF;
+  background: #A577B4;
+}
+
+
+.clearfix::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+html {
+  background-color: #0D3E10;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo img {
+  width: 20%;
+  margin: 15px 0px 10px 0px;
+}
