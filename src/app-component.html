@@ -1,14 +1,25 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="controllers/manager-controller/manager-controller.html">
+<link rel="import" href="components/search-component/search-component.html">
+<link rel="import" href="components/pages-component/pages-component.html">
+<link rel="import" href="modules/home/components/cards-list-component/card-list-component.html">
+<link rel="import" href="../../../bower_components/polymer/lib/elements/dom-repeat.html">
+
 
 <dom-module id="app-component">
   <template>
     <style>
       :host {
         display: block;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
       }
 
     </style>
-    <h2>Hello [[prop1]]!</h2>
+    <manager-controller on-data="_updateData">
+    </manager-controller>
+    <search-list data-search$="{{data}}"></search-list>
+    <pagination-list data-pagination$="[[data]]" page-limit="10" on-data-page="_dataPage"></pagination-list>
+    <card-list dataset="[[dataPage]]"></card-list>
   </template>
 
   <script>
@@ -22,12 +33,38 @@
       }
       static get properties() {
         return {
-          prop1: {
+          host: {
             type: String,
-            value: 'app-component'
-          }
+          },
+          dataset: {
+            type: Array,
+          },
+          data: {
+            type: Array,
+            value: []
+          },
+          dataPage: {
+            type: Array,
+          },
+          showSpinner: {
+            type: Boolean,
+            value: true
+          },
         };
       }
+
+      constructor() {
+        super();
+      }
+
+      _updateData(event) {
+        this.set("data", event.detail.data)
+      }
+
+      _dataPage(event) {
+        this.set("dataPage", event.detail.data)
+      }
+
     }
 
     window.customElements.define(AppComponent.is, AppComponent);

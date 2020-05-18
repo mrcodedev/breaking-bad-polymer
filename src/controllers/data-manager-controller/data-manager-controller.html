@@ -1,4 +1,3 @@
-<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../data-provider-controller/data-provider-controller.html">
 
 <dom-module id="data-manager">
@@ -20,7 +19,6 @@
         return {
           host: {
             type: String
-
           },
           path: {
             type: String,
@@ -65,7 +63,7 @@
           };
         })
 
-        this.dispatchEvent(new CustomEvent('page-list-event', {
+        this.dispatchEvent(new CustomEvent('returned-data', {
           detail: {
             data
           },
@@ -75,7 +73,7 @@
       }
 
       _onRequestError(event) {
-        this.dispatchEvent(new CustomEvent('page-list-event-error', {
+        this.dispatchEvent(new CustomEvent('returned-data-error', {
           detail: {
             error: event.detail.error
           },
