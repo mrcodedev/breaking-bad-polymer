@@ -17,8 +17,9 @@
     <manager-controller on-data="_updateData">
     </manager-controller>
     <search-list data-search$="{{data}}" on-data-search="_dataSearch"></search-list>
-    <pagination-list data-pagination$="[[data]]" page-limit="10" on-data-page="_dataPage"></pagination-list>
-    <card-list dataset="[[dataPage]]"></card-list>
+    <pagination-list data-pagination$="{{dataSearch}}" page-limit="10" on-data-page="_dataPage">
+    </pagination-list>
+    <card-list dataset="{{dataPage}}"></card-list>
   </template>
 
   <script>
@@ -42,6 +43,9 @@
             type: Array,
             value: []
           },
+          dataSearch: {
+            type: Array,
+          },
           dataPage: {
             type: Array,
           },
@@ -61,7 +65,7 @@
       }
 
       _dataSearch(event) {
-        console.log(event.detail.data);
+        this.set("dataSearch", event.detail.data);
       }
 
       _dataPage(event) {

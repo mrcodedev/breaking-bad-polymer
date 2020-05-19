@@ -72,13 +72,14 @@
           activePageIndex: {
             type: Number,
             value: 0,
-            observer: '_updateDataPages',
           },
           numberPages: {
-            type: Array
+            type: Array,
+            observer: '_changeNumberPages'
           },
           dataPagination: {
             type: Array,
+            value: [],
             observer: '_updateDataPages',
           },
           dataPage: {
@@ -114,7 +115,7 @@
       _changeActivePage(event) {
         if (event.model.item.page - 1 !== this.activePageIndex) {
           this.set('activePageIndex', event.model.index);
-          this._generatePageIndexes();
+          this._updateDataPages();
         }
       }
 
@@ -122,37 +123,43 @@
         return active ? true : false;
       }
 
-
       _previousPage(event) {
         if (this.activePageIndex >= 1) {
           this.activePageIndex = this.activePageIndex - 1;
-          this._generatePageIndexes();
+          this._updateDataPages();
         }
-
       }
 
       _nextPage() {
         if (this.activePageIndex < this.numberPages.length - 1) {
           this.activePageIndex = ++this.activePageIndex;
-          this._generatePageIndexes();
+          this._updateDataPages();
         }
       }
 
       _updateDataPages() {
         this.numberElements = this.dataPagination.length;
         this.dataPage = [];
-        if (this.numberElements > 0) {
-          const firstElement = this.pageLimit * this.activePageIndex;
-          const lastElement = firstElement + (this.pageLimit - 1);
-          for (let i = firstElement; i <= lastElement; i++) {
-            if (i < this.numberElements) {
-              this.dataPage.push(this.dataPagination[i]);
-            } else {
-              break;
-            }
-          }
-          this._generatePageIndexes();
+        let firstElement;
+        let lastElement;
+
+        if (this.numberElements > this.pageLimit) {
+          firstElement = this.pageLimit * this.activePageIndex;
+          lastElement = firstElement + (this.pageLimit - 1);
+        } else {
+          firstElement = 0;
+          lastElement = this.numberElements - 1;
         }
+
+        for (let i = firstElement; i <= lastElement; i++) {
+          if (i < this.numberElements || this.pageLimit > this.numberElements) {
+            this.dataPage.push(this.dataPagination[i]);
+          } else {
+            break;
+          }
+        }
+
+        this._generatePageIndexes();
       }
 
       _pageEvent() {
@@ -163,6 +170,14 @@
           bubbles: true,
           composed: true
         }));
+      }
+
+      _changeNumberPages(newValue, oldValue) {
+        if (typeof oldValue !== 'undefined') {
+          if (oldValue.length !== newValue.length) {
+            this.activePageIndex = 0;
+          }
+        }
       }
     }
 
