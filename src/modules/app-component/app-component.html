@@ -26,7 +26,7 @@
       }
 
     </style>
-    <spinner-element></spinner-element>
+    <spinner-element state-spinner="{{showSpinner}}"></spinner-element>
     <div class="container__content">
       <div class="content__elements">
         <header-element></header-element>
@@ -93,20 +93,9 @@
       _dataPage(event) {
         this.set("dataPage", event.detail.data)
         if (event.detail.data.length > 0) {
-          this._spinnerFire(false);
+          this.set('showSpinner', false);
         }
       }
-
-      _spinnerFire(value) {
-        this.dispatchEvent(new CustomEvent('spinner-status', {
-          detail: {
-            data: value,
-          },
-          bubbles: true,
-          composed: true
-        }));
-      }
-
     }
 
     window.customElements.define(AppComponent.is, AppComponent);

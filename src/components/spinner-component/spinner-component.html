@@ -3,7 +3,6 @@
     <style>
       :host {
         display: block;
-
       }
 
       .container__spinner {
@@ -41,13 +40,13 @@
       }
 
     </style>
-    <div class="container__spinner" style$="display: {{displaySpinner}};">
-      <div class="spinner__icon">
-        <img src="../../../assets/images/spinner.png">
-        <button on-click="_pepe">{{displaySpinner}}</button>
+    <template is="dom-if" if="{{stateSpinner}}">
+      <div class="container__spinner" style$="display: {{displaySpinner}};">
+        <div class="spinner__icon">
+          <img src="../../../assets/images/spinner.png">
+        </div>
       </div>
-    </div>
-
+    </template>
   </template>
 
   <script>
@@ -64,33 +63,12 @@
         return {
           stateSpinner: {
             type: Boolean,
-            value: true
-          },
-          displaySpinner: {
-            type: String,
-            value: 'inherit'
           }
         }
       }
 
       constructor() {
         super();
-      }
-
-      ready() {
-        super.ready();
-        window.addEventListener('spinner-status', this._changeSpinnerStyle);
-      }
-
-      _changeSpinnerStyle(event) {
-        this.stateSpinner = event.detail.data;
-        if (this.stateSpinner) {
-          this.displaySpinner = 'inherit';
-        } else {
-          this.displaySpinner = 'none';
-          console.log(this.displaySpinner);
-
-        }
       }
     }
 

@@ -59,7 +59,11 @@
           },
           isEmpty: {
             type: Boolean,
-            value: true,
+            value: false,
+          },
+          firsTime: {
+            type: Boolean,
+            value: true
           }
         };
       }
@@ -68,12 +72,12 @@
         super();
       }
 
-      ready() {
-        super.ready();
-      }
-
       _isEmpty() {
-        return this.dataset.length === 0 ? this.isEmpty = true : this.isEmpty = false;
+        if (this.firsTime) {
+          this.firsTime = false;
+        } else {
+          this.dataset.length === 0 ? this.isEmpty = true : this.isEmpty = false;
+        }
       }
     }
 
