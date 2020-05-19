@@ -1,9 +1,14 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../../components/header-component/header-component.html">
 <link rel="import" href="../../controllers/manager-controller/manager-controller.html">
 <link rel="import" href="../../components/search-component/search-component.html">
 <link rel="import" href="../../components/pages-component/pages-component.html">
 <link rel="import" href="../../components/cards-list-component/card-list-component.html">
-<link rel="import" href="../../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../components/footer-component/footer-component.html">
+<link rel="import" href="../../components/spinner-component/spinner-component.html">
+
 
 <dom-module id="app-component">
   <template>
@@ -13,13 +18,30 @@
         font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
       }
 
+      .container__content {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
     </style>
-    <manager-controller on-data="_updateData">
-    </manager-controller>
-    <search-list data-search$="{{data}}" on-data-search="_dataSearch"></search-list>
-    <pagination-list data-pagination$="{{dataSearch}}" page-limit="10" on-data-page="_dataPage">
-    </pagination-list>
-    <card-list dataset="{{dataPage}}"></card-list>
+    <spinner-element></spinner-element>
+    <div class="container__content">
+      <div class="content__elements">
+        <header-element></header-element>
+        <manager-controller on-data="_updateData">
+        </manager-controller>
+        <search-list data-search="{{data}}" on-data-search="_dataSearch"></search-list>
+        <pagination-list data-pagination="{{dataSearch}}" page-limit="10" on-data-page="_dataPage">
+        </pagination-list>
+        <card-list dataset="{{dataPage}}"></card-list>
+      </div>
+      <div class="content__footer">
+        <footer-element></footer-element>
+      </div>
+    </div>
+
   </template>
 
   <script>
@@ -70,6 +92,19 @@
 
       _dataPage(event) {
         this.set("dataPage", event.detail.data)
+        if (event.detail.data.length > 0) {
+          this._spinnerFire(false);
+        }
+      }
+
+      _spinnerFire(value) {
+        this.dispatchEvent(new CustomEvent('spinner-status', {
+          detail: {
+            data: value,
+          },
+          bubbles: true,
+          composed: true
+        }));
       }
 
     }
