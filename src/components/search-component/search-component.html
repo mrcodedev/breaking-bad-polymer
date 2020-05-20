@@ -12,7 +12,6 @@
         align-items: center;
         justify-content: center;
         margin: 20px 25px;
-
       }
 
       .container-search input[type=text] {
@@ -64,7 +63,6 @@
           },
           filteredData: {
             type: Array,
-            observer: '_searchEvent'
           }
         };
       }
@@ -73,11 +71,8 @@
         super();
       }
 
-
-
       _dataSearch(data) {
         this.set("dataSearch", data);
-        this.set("filteredData", this.dataSearch);
       }
 
 
@@ -91,15 +86,15 @@
             .toLowerCase()));
 
           this.filteredData = searchResult;
-        } else {
-          this.filteredData = this.dataSearch;
+
+          this._searchEvent();
         }
       }
 
       _searchEvent() {
         this.dispatchEvent(new CustomEvent('data-search', {
           detail: {
-            data: this.filteredData,
+            data: this.filteredData
           },
           bubbles: true,
           composed: true

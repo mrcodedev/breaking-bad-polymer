@@ -33,7 +33,7 @@
         <manager-controller on-data="_updateData">
         </manager-controller>
         <search-list data-search="{{data}}" on-data-search="_dataSearch"></search-list>
-        <pagination-list data-pagination="{{dataSearch}}" page-limit="10" on-data-page="_dataPage">
+        <pagination-list data-pagination="{{dataFiltered}}" page-limit="10" on-data-page="_dataPage">
         </pagination-list>
         <card-list dataset="{{dataPage}}"></card-list>
       </div>
@@ -65,7 +65,7 @@
             type: Array,
             value: []
           },
-          dataSearch: {
+          dataFiltered: {
             type: Array,
           },
           dataPage: {
@@ -74,7 +74,7 @@
           showSpinner: {
             type: Boolean,
             value: true
-          },
+          }
         };
       }
 
@@ -83,11 +83,13 @@
       }
 
       _updateData(event) {
-        this.set("data", event.detail.data)
+        this.set("data", event.detail.data);
+        this.set("dataFiltered", event.detail.data);
       }
 
       _dataSearch(event) {
-        this.set("dataSearch", event.detail.data);
+        this.set("dataFiltered", event.detail.data);
+
       }
 
       _dataPage(event) {
