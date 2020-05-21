@@ -5,14 +5,19 @@
         font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
       }
 
-      /* CARD CONTAINER */
       .container__card {
         position: relative;
         width: 280px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        transform: rotateY(0deg);
+        transition: transform 0.5s;
       }
 
-      /* IMAGE CARD*/
+      .container__card[active] {
+        transform: rotateY(180deg);
+        transition: transform 0.5s;
+      }
+
       .container__image-block {}
 
       .card___detail-icon {
@@ -51,7 +56,6 @@
       .nickname__text {}
 
 
-      /* DETAIL CARD */
       .container__detail-block {}
 
       .detail-block__icon {
@@ -67,7 +71,7 @@
       }
 
       .detail-block {
-        display: var(--display-profile);
+        display: none;
         position: absolute;
         top: 0;
         left: 0;
@@ -79,42 +83,45 @@
         transform: rotateY(180deg);
       }
 
+      .detail-block[active] {
+        display: block;
+      }
+
       .detail-info {
         padding: 15px;
       }
 
     </style>
-    <div class="container__card" style$="[[cardInfo]]">
-      <div class="container__image-block">
-        <div class="card___detail-icon" on-click="_cardAction">open</div>
+    <div class="container__card" active$="{{_isActiverContainerCard(cardStatus)}}">
+      <div class="container__image-block" on-data-card="_funcionPepe">
+        <div class="card___detail-icon" on-click="_cardActionOpen" data-id$="[[data.id]]">open</div>
         <div class="image-block" style$="background-image: url('[[data.image]]');">
           <div class="image-block__name">
             <div class="name__text">
               [[data.name]]
+              <div class="nickname__text">
+                [[data.nickname]]
+              </div>
             </div>
-            <div class="nickname__text">
-              [[data.nickname]]
+          </div>
+        </div>
+        <div class="container__detail-block">
+          <div class="detail-block" active$="{{_isActiverContainerCard(cardStatus)}}">
+            <div class="detail-block__icon" on-click="_cardActionClose" data-id$="[[data.id]]">
+              x
+            </div>
+            <div class="detail-info">
+              <p>Name: [[data.name]]</p>
+              <p>Nickname: [[data.nickname]]</p>
+              <p>Birthday: [[data.birthday]]</p>
+              <p>Status: [[data.status]]</p>
+              <p>Occupation: [[data.occupation]]</p>
+              <p>Played By: [[data.playedBy]]</p>
+              <p>Sessions: [[data.sessions]]</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="container__detail-block">
-        <div class="detail-block" style$="display: [[cardProfile]]">
-          <div class="detail-block__icon" on-click="_cardAction">
-            x
-          </div>
-          <div class="detail-info">
-            <p>Name: [[data.name]]</p>
-            <p>Nickname: [[data.nickname]]</p>
-            <p>Birthday: [[data.birthday]]</p>
-            <p>Status: [[data.status]]</p>
-            <p>Occupation: [[data.occupation]]</p>
-            <p>Played By: [[data.playedBy]]</p>
-            <p>Sessions: [[data.sessions]]</p>
-          </div>
-        </div>
-      </div>
-    </div>
   </template>
 
   <script>
@@ -155,7 +162,7 @@
             },
             sessions: {
               type: String
-            }
+            },
           },
           cardInfo: {
             type: String,
@@ -168,18 +175,38 @@
           cardStatus: {
             type: Boolean,
             value: false
+          },
+          cardActive: {
+            type: String,
+            notify: true,
+            observer: '_checkActiveCard'
           }
         };
       }
 
-      _cardAction() {
-        if (!this.cardStatus) {
-          this.cardInfo = 'transform: rotateY(180deg); transition: transform 0.5s;'
-          this.cardProfile = 'block';
+      constructor() {
+        super();
+      }
+
+      _cardActionOpen(event) {
+        this.cardActive = event.target.dataset.id;
+      }
+
+      _cardActionClose(event) {
+        this.cardStatus = !this.cardStatus;
+        this.cardActive = '';
+      }
+
+      _isActiverContainerCard(cardStatus) {
+        return cardStatus ? true : false;
+      }
+
+      _checkActiveCard(actual, before) {
+        if (this.data.id === parseInt(actual)) {
           this.cardStatus = true;
-        } else {
-          this.cardInfo = 'transform: rotateY(0deg); transition: transform 0.5s;'
-          this.cardProfile = 'none';
+        }
+
+        if (this.data.id === parseInt(before)) {
           this.cardStatus = false;
         }
       }

@@ -1,0 +1,92 @@
+<link rel="import" href="../card-component/card-component.html" />
+
+<dom-module id="card-list">
+  <template>
+    <style>
+      :host {
+        display: block;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+
+      }
+
+      .container__card-list {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-gap: 30px;
+        justify-items: center;
+        margin: 30px 0px 50px 0px;
+      }
+
+      .card-list-empty {
+        color: white;
+        font-size: 22px;
+        margin: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+    </style>
+    <div class="container__card-list">
+      <template is="dom-repeat" items="[[dataset]]">
+        <card-profile data="[[item]]" card-active="{{cardActive}}"></card-profile>
+      </template>
+    </div>
+    <template is=" dom-if" if="{{isEmpty}}">
+      <div class="card-list-empty">
+        <p>No Results: Never make the same mistake twice</p>
+      </div>
+    </template>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class CardList extends Polymer.Element {
+      static get is() {
+        return 'card-list';
+      }
+      static get properties() {
+        return {
+          dataset: {
+            type: Array,
+            observer: '_isEmpty'
+          },
+          isEmpty: {
+            type: Boolean,
+            value: false,
+          },
+          firsTime: {
+            type: Boolean,
+            value: true
+          },
+          cardActive: {
+            type: String,
+            notify: true,
+          }
+        };
+      }
+
+      constructor() {
+        super();
+      }
+
+      _isEmpty() {
+        if (this.firsTime) {
+          this.firsTime = false;
+        } else {
+          this.cardActive = '';
+          this.dataset.length === 0 ? this.isEmpty = true : this.isEmpty = false;
+        }
+      }
+    }
+
+    window.customElements.define(CardList.is, CardList);
+
+  </script>
+</dom-module>

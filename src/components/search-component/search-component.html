@@ -11,31 +11,35 @@
         flex-direction: row;
         align-items: center;
         justify-content: center;
-        margin: 20px 10px;
+        margin: 20px 25px;
       }
 
       .container-search input[type=text] {
-        width: 25%;
+        width: 100%;
+        max-width: 500px;
         height: 30px;
         padding: 6px;
         font-size: 17px;
         border: none;
+        outline: none;
       }
 
-      .container-search button {
+      .container-search div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         height: 42px;
-        padding: 6px 10px;
+        padding: 0px 10px;
         background: white;
         font-size: 17px;
         border: none;
-        cursor: pointer;
       }
 
     </style>
     <div class="container-search">
-      <input type="text" placeholder="Search..." name="search" value="{{valueToSearch::input}}" on-keypress="_pepe">
-      <button type="submit"><i class="fa fa-search">s-i</i></button>
-      {{valueToSearch}}
+      <input type="text" placeholder="Search..." name="search" value="{{valueToSearch::input}}"
+        on-keyup="_searchFilter">
+      <div type="submit"><i class="fa fa-search">s-i</i></div>
     </div>
   </template>
 
@@ -56,8 +60,9 @@
           },
           valueToSearch: {
             type: String,
-            observer: '_pepe'
-
+          },
+          filteredData: {
+            type: Array,
           }
         };
       }
@@ -67,13 +72,38 @@
       }
 
       _dataSearch(data) {
-        if (data.length > 0) {
-          console.log(data);
+        this.set("dataSearch", data);
+      }
+
+
+      _searchFilter() {
+        if (this.dataSearch.length > 0) {
+          let searchResult = this.dataSearch.filter(search => search.name.toLowerCase().includes(this
+            .valueToSearch
+            .toLowerCase()) || search.nickname.toLowerCase().includes(this.valueToSearch
+            .toLowerCase()) || search.playedBy.toLowerCase().includes(this.valueToSearch
+            .toLowerCase()) || search.status.toLowerCase().includes(this.valueToSearch
+            .toLowerCase()));
+
+          this.filteredData = searchResult;
+
+          this._searchEvent();
         }
       }
 
-      _pepe(first, last) {
-        console.log(last);
+      _searchEvent() {
+        this.dispatchEvent(new CustomEvent('data-search', {
+          detail: {
+            data: this.filteredData
+          },
+          bubbles: true,
+          composed: true
+        }));
+      }
+
+      ready() {
+        super.ready();
+
       }
     }
 

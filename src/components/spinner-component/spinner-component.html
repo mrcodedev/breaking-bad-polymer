@@ -1,0 +1,78 @@
+<dom-module id="spinner-element">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      .container__spinner {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        z-index: 100;
+      }
+
+      .spinner__icon {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .spinner__icon img {
+        width: 12%;
+        max-width: 150px;
+        min-width: 100px;
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+    </style>
+    <template is="dom-if" if="{{stateSpinner}}">
+      <div class="container__spinner" style$="display: {{displaySpinner}};">
+        <div class="spinner__icon">
+          <img src="../../../assets/images/spinner.png">
+        </div>
+      </div>
+    </template>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class SpinnerElement extends Polymer.Element {
+      static get is() {
+        return 'spinner-element';
+      }
+
+      static get properties() {
+        return {
+          stateSpinner: {
+            type: Boolean,
+          }
+        }
+      }
+
+      constructor() {
+        super();
+      }
+    }
+
+    window.customElements.define(SpinnerElement.is, SpinnerElement);
+
+  </script>
+</dom-module>
