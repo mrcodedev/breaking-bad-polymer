@@ -35,11 +35,16 @@
         border: none;
       }
 
+      .search-icon {
+        width: 20px;
+        height: 20px;
+      }
+
     </style>
     <div class="container-search">
       <input type="text" placeholder="Search..." name="search" value="{{valueToSearch::input}}"
         on-keyup="_searchFilter">
-      <div type="submit"><i class="fa fa-search">s-i</i></div>
+      <div type="submit"><img src="./assets/icons/search-icon.png" class="search-icon" alt="search-icon"></div>
     </div>
   </template>
 
