@@ -91,14 +91,12 @@
 
       _searchFilter() {
         if (this.dataSearch.length > 0) {
-          let searchResult = this.dataSearch.filter(search => search.name.toLowerCase().includes(this
+          this.filteredData = this.dataSearch.filter(search => search.name.toLowerCase().includes(this
             .valueToSearch
             .toLowerCase()) || search.nickname.toLowerCase().includes(this.valueToSearch
             .toLowerCase()) || search.playedBy.toLowerCase().includes(this.valueToSearch
             .toLowerCase()) || search.status.toLowerCase().includes(this.valueToSearch
-            .toLowerCase()));
-
-          this.filteredData = searchResult;
+            .toLowerCase()));;
 
           this._searchEvent();
         }

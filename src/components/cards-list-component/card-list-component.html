@@ -35,7 +35,7 @@
         <card-profile data="[[item]]" card-active="{{cardActive}}"></card-profile>
       </template>
     </div>
-    <template is=" dom-if" if="{{isEmpty}}">
+    <template is="dom-if" if="{{isEmpty}}">
       <div class="card-list-empty">
         <p>No Results: Never make the same mistake twice</p>
       </div>
@@ -79,7 +79,6 @@
       _isEmpty() {
         if (this.firsTime) {
           this.firsTime = false;
-          console.log('pepep')
         } else {
           this.cardActive = '';
           this.dataset.length === 0 ? this.isEmpty = true : this.isEmpty = false;

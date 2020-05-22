@@ -201,15 +201,10 @@
         return cardStatus ? true : false;
       }
 
-      _checkActiveCard(actual, before) {
-        if (this.data.id === parseInt(actual)) {
-          this.cardStatus = true;
-        }
-
-        if (this.data.id === parseInt(before)) {
-          this.cardStatus = false;
-        }
+      _checkActiveCard(actual) {
+        this.data.id === parseInt(actual) ? this.cardStatus = true : this.cardStatus = false;
       }
+
     }
 
     window.customElements.define(CardProfile.is, CardProfile);
