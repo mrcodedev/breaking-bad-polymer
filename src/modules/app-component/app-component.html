@@ -26,16 +26,16 @@
       }
 
     </style>
-    <spinner-element state-spinner="{{showSpinner}}"></spinner-element>
+    <spinner-element state-spinner="[[showSpinner]]"></spinner-element>
     <div class="container__content">
       <div class="content__elements">
         <header-element></header-element>
         <manager-controller on-data="_updateData">
         </manager-controller>
-        <search-list data-search="{{data}}" on-data-search="_dataSearch"></search-list>
+        <search-list data-search="[[data]]" on-data-search="_dataSearch"></search-list>
         <pagination-list data-pagination="{{dataFiltered}}" page-limit="10" on-data-page="_dataPage">
         </pagination-list>
-        <card-list dataset="{{dataPage}}"></card-list>
+        <card-list dataset="[[dataPage]]"></card-list>
       </div>
       <div class="content__footer">
         <footer-element></footer-element>
@@ -89,7 +89,6 @@
 
       _dataSearch(event) {
         this.set("dataFiltered", event.detail.data);
-
       }
 
       _dataPage(event) {
