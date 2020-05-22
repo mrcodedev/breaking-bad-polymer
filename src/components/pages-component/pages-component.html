@@ -78,7 +78,7 @@
           numberPages: {
             type: Array,
           },
-          dataPagination: {
+          paginationData: {
             type: Array,
             value: [],
             observer: '_updateDataPages',
@@ -139,7 +139,7 @@
       }
 
       _updateDataPages(dataSection) {
-        this.numberElements = this.dataPagination.length;
+        this.numberElements = this.paginationData.length;
         this.dataPage = [];
         let firstElement;
         let lastElement;
@@ -159,7 +159,7 @@
 
         for (let i = firstElement; i <= lastElement; i++) {
           if (i < this.numberElements || this.pageLimit > this.numberElements) {
-            this.dataPage.push(this.dataPagination[i]);
+            this.dataPage.push(this.paginationData[i]);
           } else {
             break;
           }

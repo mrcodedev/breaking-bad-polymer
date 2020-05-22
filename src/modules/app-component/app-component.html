@@ -32,8 +32,8 @@
         <header-element></header-element>
         <manager-controller on-data="_updateData">
         </manager-controller>
-        <search-list data-search="[[data]]" on-data-search="_dataSearch"></search-list>
-        <pagination-list data-pagination="{{dataFiltered}}" page-limit="10" on-data-page="_dataPage">
+        <search-list search-data="[[data]]" on-data-search="_dataSearch"></search-list>
+        <pagination-list pagination-data="{{dataFiltered}}" page-limit="10" on-data-page="_dataPage">
         </pagination-list>
         <card-list dataset="[[dataPage]]"></card-list>
       </div>

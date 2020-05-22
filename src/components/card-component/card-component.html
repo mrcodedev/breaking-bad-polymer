@@ -140,6 +140,12 @@
         padding-bottom: 2px;
       }
 
+      .card-icon-detail__close {
+        width: 20px;
+        height: 20px;
+        padding: 0 5px 0 0;
+      }
+
 
       .detailed-info .info-result {
         font-weight: 700;
@@ -173,7 +179,7 @@
         <div class="container__detail-block">
           <div class="detail-block" active$="{{_isActiverContainerCard(cardStatus)}}">
             <div class="detail-block__icon" on-click="_cardActionClose" data-id$="[[data.id]]">
-              <img src="./assets/icons/close-info.png" width="20px" height="20px" style="filter: invert(1)"
+              <img src="./assets/icons/close-info.png" class="card-icon-detail__close" style="filter: invert(1)"
                 data-id$="[[data.id]]" alt="close-card">
             </div>
             <div class="detail-info">

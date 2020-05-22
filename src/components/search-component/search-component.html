@@ -67,9 +67,9 @@
       }
       static get properties() {
         return {
-          dataSearch: {
+          searchData: {
             type: Array,
-            observer: '_dataSearch'
+            observer: '_searchData'
           },
           valueToSearch: {
             type: String,
@@ -84,14 +84,14 @@
         super();
       }
 
-      _dataSearch(data) {
-        this.set("dataSearch", data);
+      _searchData(data) {
+        this.set("searchData", data);
       }
 
 
       _searchFilter() {
-        if (this.dataSearch.length > 0) {
-          this.filteredData = this.dataSearch.filter(search => search.name.toLowerCase().includes(this
+        if (this.searchData.length > 0) {
+          this.filteredData = this.searchData.filter(search => search.name.toLowerCase().includes(this
             .valueToSearch
             .toLowerCase()) || search.nickname.toLowerCase().includes(this.valueToSearch
             .toLowerCase()) || search.playedBy.toLowerCase().includes(this.valueToSearch
