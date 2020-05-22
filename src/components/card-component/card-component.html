@@ -8,7 +8,7 @@
       .container__card {
         position: relative;
         width: 280px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2), 0 6px 25px 0 rgba(0, 0, 0, 0.19);
         transform: rotateY(0deg);
         transition: transform 0.5s;
       }
@@ -18,17 +18,38 @@
         transition: transform 0.5s;
       }
 
-      .container__image-block {}
-
-      .card___detail-icon {
-        position: absolute;
-        right: 0;
-        color: yellow;
-        padding: 15px;
+      .container__card[active] .card__detail-icon {
+        display: none;
       }
 
-      .card___detail-icon:hover {
+      .card__detail-icon {
+        position: absolute;
+        right: 0;
+        padding: 15px;
+        transition: filter 0.3s;
+
+      }
+
+      .card__detail-icon:hover {
         cursor: pointer;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 1));
+        filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 1));
+        transition: filter 0.3s;
+
+      }
+
+      .card-open-info {
+        width: 25px;
+        height: 20px;
+        -webkit-filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.8)) invert(1);
+        filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.8)) invert(1);
+
       }
 
       .image-block {
@@ -50,13 +71,15 @@
       }
 
       .name__text {
+        font-size: 18px;
         font-weight: 700;
+        padding: 0 0 4px 0;
       }
 
-      .nickname__text {}
-
-
-      .container__detail-block {}
+      .nickname__text {
+        font-size: 14px;
+        font-weight: 400;
+      }
 
       .detail-block__icon {
         position: absolute;
@@ -68,6 +91,12 @@
 
       .detail-block__icon:hover {
         cursor: pointer;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
       }
 
       .detail-block {
@@ -78,7 +107,7 @@
         z-index: 1;
         width: 100%;
         height: 400px;
-        background-color: rgba(0, 0, 0, 0.7);
+        background-color: rgba(0, 0, 0, 0.8);
         color: white;
         transform: rotateY(180deg);
       }
@@ -88,36 +117,94 @@
       }
 
       .detail-info {
-        padding: 15px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0 20px;
+      }
+
+      .detailed-info {
+        margin-bottom: 10px;
+      }
+
+      .detailed-info:last-child {
+        margin-bottom: 0px;
+      }
+
+      .detailed-info .info-category {
+        font-weight: 300;
+        font-size: 14px;
+        padding-bottom: 2px;
+      }
+
+
+      .detailed-info .info-result {
+        font-weight: 700;
+        font-size: 16px;
+      }
+
+      .detail-info p {
+        margin-block-start: 0em;
+        margin-block-end: 0em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
       }
 
     </style>
     <div class="container__card" active$="{{_isActiverContainerCard(cardStatus)}}">
       <div class="container__image-block" on-data-card="_funcionPepe">
-        <div class="card___detail-icon" on-click="_cardActionOpen" data-id$="[[data.id]]">open</div>
+        <div class="card__detail-icon" on-click="_cardActionOpen" data-id$="[[data.id]]"><img
+            src="./assets/icons/open-info.png" class="card-open-info" data-id$="[[data.id]]" alt="open-card">
+        </div>
         <div class="image-block" style$="background-image: url('[[data.image]]');">
           <div class="image-block__name">
             <div class="name__text">
               [[data.name]]
-              <div class="nickname__text">
-                [[data.nickname]]
-              </div>
             </div>
+            <div class="nickname__text">
+              [[data.nickname]]
+            </div>
+
           </div>
         </div>
         <div class="container__detail-block">
           <div class="detail-block" active$="{{_isActiverContainerCard(cardStatus)}}">
             <div class="detail-block__icon" on-click="_cardActionClose" data-id$="[[data.id]]">
-              x
+              <img src="./assets/icons/close-info.png" width="20px" height="20px" style="filter: invert(1)"
+                data-id$="[[data.id]]" alt="close-card">
             </div>
             <div class="detail-info">
-              <p>Name: [[data.name]]</p>
-              <p>Nickname: [[data.nickname]]</p>
-              <p>Birthday: [[data.birthday]]</p>
-              <p>Status: [[data.status]]</p>
-              <p>Occupation: [[data.occupation]]</p>
-              <p>Played By: [[data.playedBy]]</p>
-              <p>Sessions: [[data.sessions]]</p>
+              <div class="detailed-info">
+                <p class="info-category">Name</p>
+                <p class="info-result">[[data.name]]</p>
+              </div>
+              <div class="detailed-info">
+                <p class="info-category">Nickname</p>
+                <p class="info-result">[[data.nickname]]</p>
+              </div>
+              <div class="detailed-info">
+                <p class="info-category">Birthday</p>
+                <p class="info-result">[[data.birthday]]</p>
+              </div>
+              <div class="detailed-info">
+                <p class="info-category">Status</p>
+                <p class="info-result">[[data.status]]</p>
+              </div>
+              <div class="detailed-info">
+                <p class="info-category">Occupation</p>
+                <p class="info-result">[[data.occupation]]</p>
+              </div>
+              <div class="detailed-info">
+                <p class="info-category">Played By</p>
+                <p class="info-result">[[data.playedBy]]</p>
+              </div>
+              <div class="detailed-info">
+                <p class="info-category">Sessions</p>
+                <p class="info-result">[[data.sessions]]</p>
+              </div>
             </div>
           </div>
         </div>
@@ -204,7 +291,6 @@
       _checkActiveCard(actual) {
         this.data.id === parseInt(actual) ? this.cardStatus = true : this.cardStatus = false;
       }
-
     }
 
     window.customElements.define(CardProfile.is, CardProfile);
