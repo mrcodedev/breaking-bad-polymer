@@ -3,5 +3,20 @@
     "rules": [
       "polymer-2"
     ]
-  }
+  },
+  "builds": [{
+    "name": "breaking-bad",
+    "js": {
+      "minify": true
+    },
+    "css": {
+      "minify": true
+    },
+    "html": {
+      "minify": true
+    }
+  }],
+  "sources": [
+    "assets/**"
+  ]
 }
