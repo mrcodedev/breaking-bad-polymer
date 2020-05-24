@@ -1,0 +1,14 @@
+<html><head><link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../data-provider-controller/data-provider-controller.html">
+
+</head><body><dom-module id="data-manager">
+  <template>
+    <data-provider host="[[host]]" path="[[path]]" headers="[[headers]]" body="[[body]]" params="[[params]]" method="[[method]]" on-request-success="_onRequestSuccess" on-request-error="_onRequestError">
+    </data-provider>
+  </template>
+  <script>/**
+     * @customElement
+     * @polymer
+     */class DataManager extends Polymer.Element{static get is(){return"data-manager"}static get properties(){return{host:{type:String},path:{type:String},headers:{type:Object},body:{type:String},params:{type:String},method:{type:String},onPageListEvent:{type:String,notify:!0,readOnly:!0},onPageListEventError:{type:String,notify:!0,readOnly:!0}}}_onRequestSuccess(event){const data=event.detail.data.map(character=>{return{id:character.char_id,name:character.name,image:character.img,nickname:character.nickname,birthday:character.birthday,status:character.status,occupation:character.occupation,playedBy:character.portrayed,sessions:character.appearance}});this.dispatchEvent(new CustomEvent("returned-data",{detail:{data},bubbles:!0,composed:!0}))}_onRequestError(event){this.dispatchEvent(new CustomEvent("returned-data-error",{detail:{error:event.detail.error},bubbles:!0,composed:!0}))}constructor(){super()}}window.customElements.define(DataManager.is,DataManager);</script>
+</dom-module>
+</body></html>

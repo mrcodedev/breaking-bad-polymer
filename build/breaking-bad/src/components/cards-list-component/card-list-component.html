@@ -1,0 +1,99 @@
+<html>
+
+  <head>
+    <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+    <link rel="import" href="../card-component/card-component.html">
+
+  </head>
+
+  <body>
+    <dom-module id="card-list">
+      <template>
+        <style>
+          :host {
+            display: block;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+            margin: 0 50px;
+          }
+
+          .container__card-list {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-gap: 30px;
+            justify-items: center;
+            margin: 30px 0px 50px 0px;
+          }
+
+          .card-list-empty {
+            color: white;
+            font-size: 22px;
+            margin: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+          }
+
+        </style>
+        <div class="container__card-list">
+          <template is="dom-repeat" items="[[dataset]]">
+            <card-profile data="[[item]]" card-active="{{cardActive}}"></card-profile>
+          </template>
+        </div>
+        <template is="dom-if" if="{{isEmpty}}">
+          <div class="card-list-empty">
+            <p>No Results: Never make the same mistake twice</p>
+          </div>
+        </template>
+      </template>
+
+      <script>
+        /**
+         * @customElement
+         * @polymer
+         */
+        class CardList extends Polymer.Element {
+          static get is() {
+            return "card-list"
+          }
+          static get properties() {
+            return {
+              dataset: {
+                type: Array,
+                observer: "_isEmpty"
+              },
+              isEmpty: {
+                type: Boolean,
+                value: !1
+              },
+              firsTime: {
+                type: Boolean,
+                value: !0
+              },
+              cardActive: {
+                type: String,
+                notify: !0
+              }
+            }
+          }
+          constructor() {
+            super()
+          }
+          _isEmpty() {
+            if (this.firsTime) {
+              this.firsTime = !1
+            } else {
+              this.cardActive = "";
+              0 === this.dataset.length ? this.isEmpty = !0 : this.isEmpty = !1
+            }
+          }
+        }
+        window.customElements.define(CardList.is, CardList);
+
+      </script>
+    </dom-module>
+  </body>
+
+</html>

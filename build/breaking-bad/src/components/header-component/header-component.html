@@ -1,0 +1,51 @@
+<html>
+
+  <head>
+    <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+
+  </head>
+
+  <body>
+    <dom-module id="header-element">
+      <template>
+        <style>
+          :host {
+            display: block;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+          }
+
+          .header_container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          .header_container img {
+            width: 20%;
+            min-width: 160px;
+            margin: 20px 0px 10px 0px;
+          }
+
+        </style>
+        <div class="header_container">
+          <img src="assets/images/breaking-bad-logo.svg">
+        </div>
+      </template>
+
+      <script>
+        /**
+         * @customElement
+         * @polymer
+         */
+        class HeaderElement extends Polymer.Element {
+          static get is() {
+            return "header-element"
+          }
+        }
+        window.customElements.define(HeaderElement.is, HeaderElement);
+
+      </script>
+    </dom-module>
+  </body>
+
+</html>

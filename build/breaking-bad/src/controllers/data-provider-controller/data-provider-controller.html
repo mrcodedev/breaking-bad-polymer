@@ -1,0 +1,9 @@
+<html><head><link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+
+</head><body><dom-module id="data-provider">
+  <script>/**
+     * @customElement
+     * @polymer
+     */class DataProvider extends Polymer.Element{static get is(){return"data-provider"}static get properties(){return{host:{type:String},path:{type:String},headers:{type:Object},body:{type:String},params:{type:String},method:{type:String},onRequestSuccess:{type:String,notify:!0,readOnly:!0},onRequestError:{type:String,notify:!0,readOnly:!0}}}_generateRequest(){const controller=new AbortController,signal=controller.signal,realPath=`${this.host}${this.path}${this.params}`,methodsWithoutBody=["GET","HEAD","CONNECT","OPTIONS","TRACE"],myFetchData={method:this.method,headers:this.headers,signal};if(!methodsWithoutBody.includes(this.method)){myFetchData.body=JSON.stringify(this.body)}fetch(realPath,myFetchData).then(response=>{if(response.ok){this._requestSuccess(response.json())}else{controller.abort();throw new Error(`${response.statusText}, status: ${response.status}`)}}).catch(error=>{controller.abort();this._requestError(error)})}_requestSuccess(apiData){apiData.then(data=>{this.dispatchEvent(new CustomEvent("request-success",{bubbles:!0,composed:!0,detail:{data}}))})}_requestError(errorData){this.dispatchEvent(new CustomEvent("request-error",{bubbles:!0,composed:!0,detail:{error:errorData}}))}constructor(){super()}ready(){super.ready();this._generateRequest()}}window.customElements.define(DataProvider.is,DataProvider);</script>
+</dom-module>
+</body></html>

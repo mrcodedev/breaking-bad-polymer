@@ -13,10 +13,11 @@
       "minify": true
     },
     "html": {
-      "minify": true
+      "minify": false
     }
   }],
   "sources": [
-    "assets/**"
-  ]
+    "assets/**/*"
+  ],
+  "entrypoint": "index.html"
 }

@@ -1,0 +1,20 @@
+<html><head><link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+
+</head><body><dom-module id="pagination-list">
+  <template>
+    <style>:host{display:block;font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;}.container-pagination{display:flex;flex-direction:row;align-items:center;justify-content:center;margin:25px 10px 20px 10px;flex-wrap:wrap;}a{font-size:16px;color:white;padding:12px 20px;border:1px solid #093009;text-decoration:none;background-color:#032202;margin:2px;cursor:pointer;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}.container-pagination a[active]{color:white;background:#29773E;}.container-pagination a:hover{background:#1F6032;transition:all 0.5s ease;}</style>
+    <div id="pagination" class="container-pagination">
+      <a id="previous" on-click="_previousPage">«</a>
+      <template id="list" is="dom-repeat" items="[[numberPages]]">
+        <a id="[[item.id]]" active$="{{_isActive(item.active)}}" on-click="_changeActivePage">[[item.page]]</a>
+      </template>
+      <a id="next" on-click="_nextPage">»</a>
+    </div>
+  </template>
+
+  <script>/**
+     * @customElement
+     * @polymer
+     */class PaginationComponent extends Polymer.Element{static get is(){return"pagination-list"}static get properties(){return{pageLimit:{type:Number,value:10},numberElements:{type:Number},activePageIndex:{type:Number,value:0},numberPages:{type:Array},paginationData:{type:Array,value:[],observer:"_updateDataPages"},dataPage:{type:Array}}}constructor(){super()}_generatePageIndexes(){let numberPages=this.numberElements/this.pageLimit;numberPages=0===numberPages%1?numberPages:Math.floor(numberPages)+1;let result=Array.from({length:numberPages},(element,index)=>{return{id:index,page:index+1,active:this.activePageIndex===index}});this.set("numberPages",result);this._pageEvent()}_changeActivePage(event){if(event.model.item.page-1!==this.activePageIndex){this.set("activePageIndex",event.model.index);this._updateDataPages("change-active-page")}}_previousPage(event){if(1<=this.activePageIndex){this.activePageIndex=this.activePageIndex-1;this._updateDataPages("previous-page")}}_nextPage(){if(this.activePageIndex<this.numberPages.length-1){this.activePageIndex=++this.activePageIndex;const panoli="panoli-siguiente";this._updateDataPages("next-page")}}_isActive(active){return active?!0:!1}_updateDataPages(dataSection){this.numberElements=this.paginationData.length;this.dataPage=[];let firstElement,lastElement;if("change-active-page"!==dataSection&&"previous-page"!==dataSection&&"next-page"!==dataSection){this.activePageIndex=0}if(this.numberElements>this.pageLimit){firstElement=this.pageLimit*this.activePageIndex;lastElement=firstElement+(this.pageLimit-1)}else{firstElement=0;lastElement=this.numberElements-1}for(let i=firstElement;i<=lastElement;i++){if(i<this.numberElements||this.pageLimit>this.numberElements){this.dataPage.push(this.paginationData[i])}else{break}}this._generatePageIndexes()}_pageEvent(){this.dispatchEvent(new CustomEvent("data-page",{detail:{data:this.dataPage},bubbles:!0,composed:!0}))}}window.customElements.define(PaginationComponent.is,PaginationComponent);</script>
+</dom-module>
+</body></html>

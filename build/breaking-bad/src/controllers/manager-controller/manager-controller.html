@@ -1,0 +1,14 @@
+<html><head><link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../data-manager-controller/data-manager-controller.html">
+
+</head><body><dom-module id="manager-controller">
+  <template>
+    <data-manager host="[[host]]" path="[[path]]" headers="[[headers]]" body="[[body]]" params="[[params]]" method="[[method]]" on-returned-data="_dataReturned" on-returned-data-error="_dataReturnedError">
+  </data-manager></template>
+  
+  <script>/**
+     * @customElement
+     * @polymer
+     */class ManagerController extends Polymer.Element{static get is(){return"manager-controller"}static get properties(){return{host:{type:String},path:{type:String},headers:{type:Object},body:{type:String},params:{type:String},method:{type:String},data:{type:Object}}}constructor(){super();this.host="https://www.breakingbadapi.com/api/";this.path="characters";this.params="";this.headers={};this.body="";this.method="GET"}ready(){super.ready()}_dataReturned(event){this.dispatchEvent(new CustomEvent("data",{detail:{data:event.detail.data},bubbles:!0,composed:!0}))}_dataReturnedError(event){this.dispatchEvent(new CustomEvent("data",{detail:{data:event.detail.error},bubbles:!0,composed:!0}))}}window.customElements.define(ManagerController.is,ManagerController);</script>
+</dom-module>
+</body></html>

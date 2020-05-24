@@ -1,0 +1,123 @@
+<html>
+
+  <head>
+    <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+
+  </head>
+
+  <body>
+    <dom-module id="search-list">
+      <template>
+        <style>
+          :host {
+            display: block;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+          }
+
+          .container-search {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 25px;
+          }
+
+          .container-search input[type=text] {
+            width: 100%;
+            max-width: 500px;
+            height: 30px;
+            padding: 6px 6px 6px 12px;
+            font-size: 17px;
+            border: none;
+            outline: none;
+          }
+
+          .container-search div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 42px;
+            padding: 0px 10px 0 2px;
+            background: white;
+            font-size: 17px;
+            border: none;
+          }
+
+          .search-icon {
+            width: 20px;
+            height: 20px;
+            opacity: 0.3;
+            transition: all 0.5s ease;
+          }
+
+          .container-search:hover .search-icon {
+            opacity: 0.5;
+            transition: all 0.5s ease;
+          }
+
+        </style>
+        <div class="container-search">
+          <input type="text" placeholder="Search..." name="search" value="{{valueToSearch::input}}"
+            on-keyup="_searchFilter">
+          <div type="submit"><img src="assets/icons/search-icon.png" class="search-icon" alt="search-icon"></div>
+        </div>
+      </template>
+
+      <script>
+        /**
+         * @customElement
+         * @polymer
+         */
+        class SearchComponent extends Polymer.Element {
+          static get is() {
+            return "search-list"
+          }
+          static get properties() {
+            return {
+              searchData: {
+                type: Array,
+                observer: "_searchData"
+              },
+              valueToSearch: {
+                type: String
+              },
+              filteredData: {
+                type: Array
+              }
+            }
+          }
+          constructor() {
+            super()
+          }
+          _searchData(data) {
+            this.set("searchData", data)
+          }
+          _searchFilter() {
+            if (0 < this.searchData.length) {
+              this.filteredData = this.searchData.filter(search => search.name.toLowerCase().includes(this
+                  .valueToSearch.toLowerCase()) || search.nickname.toLowerCase().includes(this.valueToSearch
+                  .toLowerCase()) || search.playedBy.toLowerCase().includes(this.valueToSearch.toLowerCase()) ||
+                search.status.toLowerCase().includes(this.valueToSearch.toLowerCase()));;
+              this._searchEvent()
+            }
+          }
+          _searchEvent() {
+            this.dispatchEvent(new CustomEvent("data-search", {
+              detail: {
+                data: this.filteredData
+              },
+              bubbles: !0,
+              composed: !0
+            }))
+          }
+          ready() {
+            super.ready()
+          }
+        }
+        window.customElements.define(SearchComponent.is, SearchComponent);
+
+      </script>
+    </dom-module>
+  </body>
+
+</html>
